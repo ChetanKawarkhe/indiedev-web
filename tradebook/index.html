@@ -69,7 +69,8 @@ nav{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:50;width
 .links a:hover,.links a.on{color:#fff}
 .pill{position:absolute;top:0;left:0;height:100%;border-radius:999px;background:linear-gradient(135deg,var(--coral),var(--rose));opacity:0;transition:all .35s cubic-bezier(.3,1.4,.5,1)}
 .right{display:flex;align-items:center;gap:8px}
-.nav-cta{background:var(--text);color:var(--bg);font-weight:600;font-size:14px;padding:8px 16px;border-radius:999px;transition:transform .25s,background .25s,color .25s}
+.nav-cta{background:var(--text);color:var(--bg);font-weight:600;font-size:14px;padding:8px 16px;border-radius:999px;transition:transform .25s,background .25s,color .25s;display:inline-flex;align-items:center;gap:7px}
+.nav-cta svg{width:15px;height:15px}
 .nav-cta:hover{background:var(--coral);color:#fff;transform:scale(1.05)}
 /* theme toggle */
 .tg{position:relative;width:58px;height:30px;border-radius:99px;border:1px solid var(--line);background:linear-gradient(135deg,#2a1b2a,#3d2230);overflow:hidden;transition:background .6s,transform .25s}
@@ -94,9 +95,17 @@ nav{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:50;width
 .btn:hover{transform:translateY(-3px);box-shadow:0 18px 40px rgba(217,104,104,.4)}
 .btn.ghost{border:1px solid var(--line);background:var(--surface)}
 .btn.ghost:hover{border-color:var(--coral);box-shadow:none}
+/* store buttons */
+.btn svg{width:20px;height:20px;flex:none;transition:transform .3s}
+.btn:hover svg{transform:scale(1.15) rotate(-6deg)}
+.btn.play{padding:11px 24px 11px 20px}
+.btn.play svg{width:28px;height:28px}
+.tx{display:flex;flex-direction:column;line-height:1.1;text-align:left}
+.tx small{font-size:10.5px;font-weight:500;letter-spacing:.09em;text-transform:uppercase;opacity:.88}
+.tx b{font-size:18px;font-weight:600}
 
 /* hero */
-.hero{min-height:100vh;display:flex;align-items:center;padding:120px 0 60px}
+.hero{min-height:auto;display:flex;align-items:center;padding:130px 0 50px}
 .hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
 .hero h1{font-size:clamp(40px,6.2vw,74px);font-weight:800;margin-bottom:20px}
 .hero h1 span{background:linear-gradient(90deg,var(--coral),var(--blush));-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -113,6 +122,17 @@ nav{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:50;width
 .chip.a{left:-2%;top:18%}.chip.b{right:-2%;bottom:20%}
 .up{color:#6fae52}[data-theme=dark] .up{color:var(--sage)}.dn{color:var(--coral)}
 @media(max-width:860px){.hero .wrap{grid-template-columns:1fr}.stage{margin-top:30px}.chip.a{left:0}.chip.b{right:0}}
+
+/* highlights strip (shows visitors there is more below the hero) */
+.strip{padding:6px 0 30px}
+.sg{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.si{display:flex;align-items:center;gap:12px;padding:16px 18px;border-radius:18px;background:var(--surface);border:1px solid var(--line);font-size:14.5px;line-height:1.3;transition:transform .3s,border-color .3s}
+.si:hover{transform:translateY(-4px);border-color:rgba(217,104,104,.6)}
+.si .ico{margin:0;flex:none;width:38px;height:38px;border-radius:12px}
+.si b{display:block;font-family:var(--head);font-size:15.5px}
+.si span{color:var(--mute);font-size:13px}
+@media(max-width:960px){.sg{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.sg{grid-template-columns:1fr}}
 
 /* cards */
 .grid{display:grid;gap:18px;margin-top:44px}
@@ -188,8 +208,10 @@ footer::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;back
 .fg li a:hover{color:var(--coral);padding-left:6px}
 .fg .brand{margin-bottom:14px}
 .fg .brand img{height:34px}.fg .bn{font-size:24px}
-.mail{display:inline-block;margin-top:12px;padding:9px 16px;border-radius:99px;border:1px solid var(--line);font-size:14px;transition:all .3s}
+.mail{display:inline-flex;align-items:center;gap:8px;margin-top:12px;padding:9px 16px;border-radius:99px;border:1px solid var(--line);font-size:14px;transition:all .3s}
+.mail svg{width:16px;height:16px}
 .mail:hover{background:var(--coral);border-color:var(--coral);color:#fff;transform:translateY(-2px)}
+.ft-play svg{width:14px;height:14px;vertical-align:-2px;margin-right:6px}
 .fb{margin-top:44px;padding-top:22px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--mute);font-size:13.5px}
 .fb a:hover{color:var(--coral)}
 
@@ -228,7 +250,7 @@ footer::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;back
         <svg class="moon" viewBox="0 0 24 24" fill="currentColor"><path d="M20 14.5A8.5 8.5 0 019.5 4a8.5 8.5 0 1010.5 10.5z"/></svg>
         <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="4" fill="currentColor"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>
       </span></button>
-    <a class="nav-cta" href="#get">Get app</a>
+    <a class="nav-cta" href="https://play.google.com/store/apps/details?id=com.chetankawarkhe.TradeBook" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 3.2v17.6c0 .6.7 1 1.2.7l14.2-8.8c.5-.3.5-1 0-1.3L6.2 2.5C5.7 2.2 5 2.6 5 3.2z"/></svg>Get app</a>
   </div>
 </nav>
 
@@ -238,10 +260,13 @@ footer::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;back
       <h1 class="rv">Your trades, <span>finally explained.</span></h1>
       <p class="sub rv" style="--d:.15s">TradeBook Journal logs every trade, scores your discipline and shows the patterns behind your wins and losses. Track. Analyze. Improve.</p>
       <div class="cta rv" style="--d:.3s">
-        <a class="btn main" href="#get">Coming soon to Android</a>
-        <a class="btn ghost" href="#analytics">See the analytics</a>
+        <a class="btn main play" href="https://play.google.com/store/apps/details?id=com.chetankawarkhe.TradeBook" target="_blank" rel="noopener" aria-label="Get TradeBook on Google Play">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 3.2v17.6c0 .6.7 1 1.2.7l14.2-8.8c.5-.3.5-1 0-1.3L6.2 2.5C5.7 2.2 5 2.6 5 3.2z"/></svg>
+          <span class="tx"><small>Get it on</small><b>Google Play</b></span>
+        </a>
+        <a class="btn ghost" href="#analytics"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>See the analytics</a>
       </div>
-      <p class="soon rv" style="--d:.4s">Not on Google Play yet. Tap Get app to be notified at launch.</p>
+      <p class="soon rv" style="--d:.4s">Now live on Google Play. Download and start journaling today.</p>
     </div>
     <div class="stage rv" data-r="r" style="--d:.2s">
       <img class="poster" data-lb="0" src="images/shot-1.jpg" alt="TradeBook dashboard in light and dark mode">
@@ -250,6 +275,15 @@ footer::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;back
     </div>
   </div>
 </header>
+
+<section class="strip">
+  <div class="wrap"><div class="sg">
+    <div class="si rv" style="--d:0s"><div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 100 18 9 9 0 000-18zM8 12l3 3 5-6"/></svg></div><div><b>Trader Score</b><span>Rated out of 100</span></div></div>
+    <div class="si rv" style="--d:.1s"><div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div><div><b>Visual analytics</b><span>See where money leaks</span></div></div>
+    <div class="si rv" style="--d:.2s"><div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 20h14"/></svg></div><div><b>Excel &amp; PDF export</b><span>Your data, your way</span></div></div>
+    <div class="si rv" style="--d:.3s"><div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 100 18zM12 3v18"/></svg></div><div><b>Light &amp; dark</b><span>Easy on the eyes</span></div></div>
+  </div></div>
+</section>
 
 <section id="how">
   <div class="wrap">
@@ -293,12 +327,14 @@ footer::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;back
 <section id="get">
   <div class="wrap getc">
     <img class="bn2 rv" data-r="s" data-lb="-1" src="images/banner.png" alt="TradeBook – Your Trading Journal. Track. Analyze. Improve.">
-    <h2 class="rv">Launching soon on Google Play</h2>
-    <p class="sub rv">Want to be first in line? Send us a quick email and we'll let you know the day it goes live.</p>
+    <h2 class="rv">Download TradeBook on Google Play</h2>
+    <p class="sub rv">Start logging trades, scoring your discipline and spotting your patterns today.</p>
     <div class="cta rv">
-      <!-- When live, change this button to your Play Store link -->
-      <a class="btn main" href="mailto:tradebookjournal@gmail.com?subject=Notify%20me%20when%20TradeBook%20launches">Notify me at launch</a>
-      <a class="btn ghost" href="#features">Explore features</a>
+      <a class="btn main play" href="https://play.google.com/store/apps/details?id=com.chetankawarkhe.TradeBook" target="_blank" rel="noopener" aria-label="Get TradeBook on Google Play">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 3.2v17.6c0 .6.7 1 1.2.7l14.2-8.8c.5-.3.5-1 0-1.3L6.2 2.5C5.7 2.2 5 2.6 5 3.2z"/></svg>
+        <span class="tx"><small>Get it on</small><b>Google Play</b></span>
+      </a>
+      <a class="btn ghost" href="#features"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13h6V4H4zM14 20h6V11h-6zM4 20h6v-3H4zM14 8h6V4h-6z"/></svg>Explore features</a>
     </div>
   </div>
 </section>
@@ -309,9 +345,11 @@ footer::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;back
       <div>
         <a class="brand" href="https://indiedev.co.in/tradebook/"><img src="images/logo-mark.png" alt=""><span class="bn"><b>Trade</b>Book</span></a>
         <p>A trading journal for Android.<br>Track. Analyze. Improve.</p>
-        <a class="mail" href="mailto:tradebookjournal@gmail.com">tradebookjournal@gmail.com</a>
+        <a class="mail" href="mailto:tradebookjournal@gmail.com"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 8l9 6 9-6"/></svg>tradebookjournal@gmail.com</a>
       </div>
-      <div><h4>Explore</h4><ul><li><a href="#features">Features</a></li><li><a href="#analytics">Analytics</a></li><li><a href="#screens">Screens</a></li></ul></div>
+      <div><h4>Explore</h4><ul>
+        <li><a class="ft-play" href="https://play.google.com/store/apps/details?id=com.chetankawarkhe.TradeBook" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 3.2v17.6c0 .6.7 1 1.2.7l14.2-8.8c.5-.3.5-1 0-1.3L6.2 2.5C5.7 2.2 5 2.6 5 3.2z"/></svg>Get it on Google Play</a></li>
+        <li><a href="#features">Features</a></li><li><a href="#analytics">Analytics</a></li><li><a href="#screens">Screens</a></li></ul></div>
       <div><h4>Legal</h4><ul>
         <li><a href="https://indiedev.co.in/tradebook/privacy.html">Privacy Policy</a></li>
         <li><a href="https://indiedev.co.in/tradebook/terms.html">Terms</a></li>
