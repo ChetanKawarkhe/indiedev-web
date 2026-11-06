@@ -553,9 +553,12 @@ footer{z-index:1}
 .shot img{-webkit-user-drag:none;user-select:none}
 
 /* wide logos (NetAlgo) */
-.ico.wide{width:auto;height:44px;border-radius:10px;font-size:1rem}
-.ico.wide img{width:auto;height:100%;object-fit:contain}
-.ico.lgi.wide{width:auto;height:60px;border-radius:12px}
+.ico.wide{display:block;width:auto;height:auto;border-radius:0;background:transparent}
+.ico.wide img{display:block;width:auto;height:40px;max-width:100%;object-fit:contain}
+.ico.lgi.wide img{height:52px}
+.feat .ico.wide img{height:30px}
+.proj>div{min-width:0}
+.proj.stack{grid-template-columns:1fr;gap:16px;align-items:start}
 
 /* multiple projects */
 #feat{display:grid;gap:10px}
@@ -782,7 +785,7 @@ $('#rView').href=RESUME_VIEW;$('#rDl').href=RESUME_DOWNLOAD;
 if(RESUME_DOWNLOAD===RESUME_VIEW)$('#rDl').setAttribute('download','Chetan_Kawarkhe.pdf');
 $('#feat').innerHTML=projects.map(p=>`<div class="feat">${ico(p)}<div class="t"><b>${p.name}</b><small>Live app</small></div><a class="btn sage sm liquid" href="${p.link}">${LQ}<span>Open</span><span class="ic">→</span></a></div>`).join('');
 $('#projList').innerHTML=projects.map(p=>`<div class="pblock">
-<article class="proj liquid rv">${LQ}${ico(p,'lgi')}<div><h3>${p.name}</h3><p>${p.desc}</p><div class="tags">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div><a class="btn sage liquid" href="${p.link}">${LQ}<span>Open ${p.name}</span><span class="ic">→</span></a></div></article>
+<article class="proj liquid rv ${p.wide?'stack':''}">${LQ}${ico(p,'lgi')}<div><h3>${p.name}</h3><p>${p.desc}</p><div class="tags">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div><a class="btn sage liquid" href="${p.link}">${LQ}<span>Open ${p.name}</span><span class="ic">→</span></a></div></article>
 <h3 class="gh rv">${p.name} screenshots</h3>
 <p class="sub rv" style="margin-bottom:14px">Swipe or drag to browse. Tap a screenshot to zoom in.</p>
 <div class="shots rv ${p.landscape?'land':''}">${p.shots.map((s,i)=>`<button class="shot" aria-label="Zoom ${p.name} screenshot ${i+1}"><span class="ph">Add ${s}</span><img src="${s}" alt="${p.name} screenshot ${i+1}" loading="lazy"><span class="zh">⤢</span></button>`).join('')}</div>
