@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NETALGO // Algorithm Viewer</title>
+<link rel="icon" id="ic" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#d8d4c3;--panel:#e9e6d8;--ink:#1a1a1a;--dim:#7b7866;--acc:#0b6b2f;--amb:#a35200;--red:#b3261e;--cy:#0a5f7a;--line:#1a1a1a;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#060b08;--panel:#0b130e;--ink:#b8f5c8;--dim:#4a7a58;--acc:#39ff7a;--amb:#ffb000;--red:#ff4d4d;--cy:#4dd8ff;--line:#1e7a44}}
+:root[data-theme="dark"]{--bg:#060b08;--panel:#0b130e;--ink:#b8f5c8;--dim:#4a7a58;--acc:#39ff7a;--amb:#ffb000;--red:#ff4d4d;--cy:#4dd8ff;--line:#1e7a44}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font:20px/1.25 'VT323','Courier New',monospace;display:flex;flex-direction:column;overflow:hidden}
+header{display:flex;justify-content:space-between;align-items:center;padding:6px 12px;border-bottom:2px solid var(--line);background:var(--panel)}
+header b{color:var(--acc);letter-spacing:2px}header i{color:var(--dim);font-style:normal}
+.cur{animation:bl 1s steps(2) infinite}@keyframes bl{50%{opacity:0}}
+.app{flex:1;min-height:0;display:grid;grid-template-rows:minmax(0,1fr);grid-template-columns:250px 1fr 330px;transition:grid-template-columns .35s ease}
+body.nc .app{grid-template-columns:0 1fr 330px}
+.side{border-right:2px solid var(--line);background:var(--panel);overflow-y:auto;overflow-x:hidden;white-space:nowrap;min-width:0}
+.side h4{margin:10px 0 2px;padding:0 12px;color:var(--amb);font-weight:normal;letter-spacing:1px}
+.side button{display:block;width:100%;text-align:left;background:none;border:0;color:var(--ink);font:inherit;padding:3px 12px 3px 22px;cursor:pointer}
+.side button:hover{color:var(--acc)}
+.side button.on{background:var(--acc);color:var(--bg)}
+.stage{position:relative;display:flex;flex-direction:column;min-width:0;background:var(--bg)}
+.stage::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(rgba(0,0,0,.09) 0 1px,transparent 1px 3px)}
+.cvw{flex:1;min-height:0;position:relative}canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.ctl{display:flex;gap:8px;align-items:center;padding:8px;border-top:2px solid var(--line);background:var(--panel);position:relative;z-index:2}
+.ctl input[type=range]{flex:1;min-width:60px;accent-color:var(--acc)}
+.b,select{font:inherit;color:var(--ink);background:var(--panel);border:2px solid var(--line);padding:1px 10px;cursor:pointer;box-shadow:2px 2px 0 var(--line)}
+.b:active{transform:translate(2px,2px);box-shadow:none}
+.info{border-left:2px solid var(--line);overflow:auto;padding:12px 16px;background:var(--panel);min-width:0}
+.info h2{color:var(--acc);margin:0;font-weight:normal;font-size:30px}
+.info h3{color:var(--amb);margin:14px 0 4px;font-weight:normal;border-bottom:1px dashed var(--dim)}
+.info p{margin:4px 0}.tag{color:var(--dim)}.info ol{padding-left:24px;margin:0}
+body.fs .stage{position:fixed;inset:0;z-index:50}
+@media (max-width:900px){.app{grid-template-columns:1fr!important;grid-template-rows:auto 62vh auto;overflow:auto}.side{max-height:160px;border-right:0}}
+#pop{position:fixed;top:44px;right:12px;z-index:60;background:var(--panel);border:2px solid var(--line);padding:10px;box-shadow:4px 4px 0 var(--line);width:280px}
+#pop[hidden]{display:none}#pr{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}#pr .b{padding:0 8px;font-size:18px}
+#pop label{display:flex;justify-content:space-between;align-items:center;margin:4px 0}
+#pop input{width:56px;height:28px;border:2px solid var(--line);background:none;padding:0;cursor:pointer}
+#lg{display:none;height:26%;min-height:120px;max-height:210px;overflow:auto;border-top:2px solid var(--line);background:var(--panel);position:relative;z-index:2}
+#lg table{width:100%;border-collapse:collapse;font-size:18px;white-space:nowrap}
+#lg th{position:sticky;top:0;background:var(--panel);color:var(--amb);text-align:left;font-weight:normal;padding:2px 10px;border-bottom:1px solid var(--line)}
+#lg td{padding:1px 10px}#lg tr.r{cursor:pointer}#lg tr.r:hover{color:var(--acc)}#lg tr.on,#lg tr.on:hover{background:var(--acc);color:var(--bg)}
+body.fs #lg{display:none!important}
+#rd h3{color:var(--cy)}#rd:not(:empty){margin-bottom:14px;padding-bottom:6px;border-bottom:2px solid var(--line)}#rd p{margin:2px 0}
+</style></head><body>
+<header><span><b>NETALGO//VIEWER</b> <i>v1.0 · network &amp; scheduling algorithms</i></span><button class="b" id="pl">&#9679; PALETTE</button></header>
+<div id="pop" hidden><div id="pr"></div><div id="cp"></div></div>
+<div class="app">
+<nav class="side" id="side"></nav>
+<main class="stage" id="stage">
+<div class="cvw"><canvas id="cv"></canvas></div>
+<div id="lg"><table><thead><tr><th>#</th><th>TIME</th><th>CLIENT IP:PORT</th><th>REQUEST</th><th>BACKEND</th><th>STATUS</th></tr></thead><tbody id="lgb"></tbody></table></div>
+<div class="ctl">
+<button class="b" id="mn">&#9664; MENU</button>
+<button class="b" id="pp">&#10074;&#10074; PAUSE</button>
+<button class="b" id="rs">&#8634;</button>
+<input type="range" id="sc" min="0" max="1000" value="0" aria-label="timeline">
+<span id="tm">0.0s</span>
+<select id="sp"><option value=".5">0.5x</option><option value="1" selected>1x</option><option value="2">2x</option></select>
+<button class="b" id="fs">&#9974; FULL</button>
+</div></main>
+<aside class="info" id="info"><div id="rd"></div><div id="ib"></div></aside>
+</div>
+<script>
+const $=s=>document.querySelector(s),cv=$('#cv'),x=cv.getContext('2d'),F="'VT323','Courier New',monospace";
+if(!CanvasRenderingContext2D.prototype.roundRect)CanvasRenderingContext2D.prototype.roundRect=function(a,b,w,h){this.rect(a,b,w,h)};
+let W=0,H=0,K={};
+const fit=()=>{const r=cv.getBoundingClientRect(),d=devicePixelRatio||1;W=r.width;H=r.height;cv.width=W*d;cv.height=H*d;x.setTransform(d,0,0,d,0,0)};
+new ResizeObserver(fit).observe(cv);
+const cols=()=>{const s=getComputedStyle(document.documentElement);['bg','ink','dim','acc','amb','red','cy'].forEach(n=>K[n]=s.getPropertyValue('--'+n).trim())};
+const tx=(s,a,b,c,z=20,al='left')=>{x.fillStyle=c;x.font=z+'px '+F;x.textAlign=al;x.textBaseline='middle';x.fillText(s,a,b)};
+const box=(a,b,w,h,c,f)=>{x.fillStyle=f||K.bg;x.strokeStyle=c;x.lineWidth=2;x.fillRect(a,b,w,h);x.strokeRect(a,b,w,h)};
+const ln=(a,b,c,d,col,w=2,dash)=>{x.beginPath();x.setLineDash(dash||[]);x.strokeStyle=col;x.lineWidth=w;x.moveTo(a,b);x.lineTo(c,d);x.stroke();x.setLineDash([])};
+const ease=p=>p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;
+const pkt=(a,b,lab,c)=>{x.shadowColor=c;x.shadowBlur=14;x.fillStyle=c;x.fillRect(a-9,b-9,18,18);x.shadowBlur=0;tx(lab,a,b-20,c,18,'center')};
+
+/* ---- renderers ---- */
+function P(pts,c,a){x.beginPath();pts.forEach((q,i)=>i?x.lineTo(q[0],q[1]):x.moveTo(q[0],q[1]));x.closePath();x.fillStyle=K.bg;x.fill();const g=x.globalAlpha;x.globalAlpha=g*a;x.fillStyle=c;x.fill();x.globalAlpha=g;x.stroke()}
+function B3(cx,cy,w,h,d,c){const dx=d*.7,dy=d*.45,fx=cx-(w+dx)/2,fy=cy-h/2+dy/2;
+ P([[fx,fy],[fx+dx,fy-dy],[fx+w+dx,fy-dy],[fx+w,fy]],c,.45);P([[fx+w,fy],[fx+w+dx,fy-dy],[fx+w+dx,fy+h-dy],[fx+w,fy+h]],c,.25);P([[fx,fy],[fx+w,fy],[fx+w,fy+h],[fx,fy+h]],c,.1);return[fx,fy]}
+function icon(k,cx,cy,s,c,on){
+ x.save();x.strokeStyle=c;x.lineWidth=2;x.lineJoin='round';x.lineCap='round';const ga=x.globalAlpha;
+ x.globalAlpha=ga*.25;x.fillStyle=K.ink;x.beginPath();x.ellipse(cx+s*.1,cy+s*.66,s*.75,s*.17,0,0,7);x.fill();x.globalAlpha=ga;
+ if(on){x.shadowColor=c;x.shadowBlur=20}
+ const D=(a,b,f)=>{x.beginPath();x.arc(a,b,2.6,0,7);x.fillStyle=f?c:K.dim;x.fill()},Ln=(a,b,d,e)=>{x.beginPath();x.moveTo(a,b);x.lineTo(d,e);x.stroke()};
+ if(k=='srv')for(let i=2;i>=0;i--){const[fx,fy]=B3(cx,cy-s*.4+i*s*.36,s,s*.3,s*.5,c);D(fx+s*.14,fy+s*.15,on||i<2);Ln(fx+s*.3,fy+s*.15,fx+s*.8,fy+s*.15)}
+ else if(k=='pc'){const[fx,fy]=B3(cx,cy-s*.1,s,s*.65,s*.2,c);x.globalAlpha=ga*.3;x.fillStyle=c;x.fillRect(fx+s*.08,fy+s*.08,s*.84,s*.49);x.globalAlpha=ga;Ln(fx+s*.18,fy+s*.22,fx+s*.6,fy+s*.22);Ln(fx+s*.18,fy+s*.36,fx+s*.75,fy+s*.36);B3(cx+s*.05,cy+s*.45,s*.4,s*.08,s*.3,c)}
+ else{const[fx,fy]=B3(cx,cy+s*.1,s*1.1,s*.35,s*.6,c);[0,1,2].forEach(j=>D(fx+s*.18+j*s*.2,fy+s*.17,on||j<2));[.2,.85].forEach(q=>Ln(fx+s*q,fy-s*.2,fx+s*q+(q<.5?-1:1)*s*.08,fy-s*.62))}
+ x.restore()}
+const INTRO=8.5,CIP=['203.0.113.11','198.51.100.27','192.0.2.45','203.0.113.77','198.51.100.9','192.0.2.133'],PATHS=['GET /index.html','POST /api/login','GET /img/logo.png','GET /api/cart','POST /api/pay','GET /video/intro'];
+let SEL=-1,REQ=-1,CFG=null;
+const ipOf=(c,k)=>c.cl?c.cl[k]:CIP[(k*5+2)%6],pt=k=>40000+k*7919%20000,sv=q=>'10.0.1.'+(11+q),cl01=v=>Math.max(0,Math.min(1,v));
+function cam(t,X,my){const Q=[[0,2.7,X[0],my],[2,2.7,X[0],my],[3.4,1.9,(X[0]+X[1])/2,my],[4.4,1.9,(X[0]+X[1])/2,my],[5.2,1.5,X[2],H*.45],[7.2,1.5,X[2],H*.45],[8.4,1,W/2,H/2]];
+ if(t>=8.4)return[1,W/2,H/2];let i=0;while(Q[i+1][0]<=t)i++;const a=Q[i],b=Q[i+1],q=ease(cl01((t-a[0])/(b[0]-a[0])));return[1,2,3].map(j=>a[j]+(b[j]-a[j])*q)}
+function lb(t,c){
+ CFG=c;const tt=t-INTRO,n=c.names.length,L=c.seq.length;let k=-1,p=0;
+ if(tt>=0){k=Math.floor(tt);p=tt-k;if(k>=L){k=L-1;p=1}}
+ REQ=k;const s=k<0?-1:c.seq[k],X=[W*.12,W*.42,W*.7],sy=i=>H*.2+H*.5*i/(n-1),my=H*.45;
+ const hit=i=>k<0?0:c.seq.slice(0,k).filter(q=>q==i).length+(p>.95&&s==i?1:0),
+ live=i=>c.dur?c.seq.reduce((a,q,j)=>a+(q==i&&j<=k&&tt>=j+1&&tt<j+1+c.dur[j]?1:0),0):0,
+ ap=t0=>cl01((t-t0)/.7),G=(a,f)=>{x.globalAlpha=a;f();x.globalAlpha=1},
+ seg=(x0,y0,x1,y1,a,col,w)=>ln(x0,y0,x0+(x1-x0)*a,y0+(y1-y0)*a,col,w);
+ const[z,fx,fy]=cam(t,X,my);x.save();x.translate(W/2,H/2);x.scale(z,z);x.translate(-fx,-fy);
+ seg(X[0]+40,my,X[1]-40,my,ap(2.6),K.dim,2);
+ c.names.forEach((nm,i)=>{const a=ap(5+i*.7),on=i==s&&p>.4,y=sy(i),m=live(i);
+  seg(X[1]+40,my,X[2]-40,y,a,on?K.amb:K.dim,on?3:2);
+  G(a,()=>{icon('srv',X[2],y,56*(.7+.3*a),on?K.amb:K.acc,on);
+   tx(nm,X[2]+44,y-22,K.ink,20);tx(sv(i),X[2]+44,y-5,K.cy,18);tx(c.dur?'conn '+m:'hits '+hit(i),X[2]+44,y+12,K.dim,18);
+   if(c.sc&&k>=0)tx(c.lab+' '+c.sc[k][i],X[2]+44,y+29,on?K.amb:K.dim,18);
+   for(let d=0;d<m;d++){x.fillStyle=K.cy;x.fillRect(X[2]-28+d*9,y+42,6,6)}})});
+ G(ap(.2),()=>{icon('pc',X[0],my,64,K.acc);tx(k>=0?ipOf(c,k):'CLIENT',X[0],my+56,K.acc,20,'center')});
+ G(ap(2.8),()=>{icon('lb',X[1],my,64,K.amb);tx('LOAD BALANCER',X[1],my+56,K.amb,20,'center');tx('VIP 198.51.100.10',X[1],my+74,K.cy,18,'center')});
+ if(k>=0){let q,px,py;
+  if(p<.4){q=ease(p/.4);px=X[0]+40+(X[1]-X[0]-80)*q;py=my}else{q=ease((p-.4)/.6);px=X[1]+40+(X[2]-X[1]-80)*q;py=my+(sy(s)-my)*q}
+  pkt(px,py,'#'+(k+1),K.amb);
+  if(SEL>=0&&SEL<=k){x.strokeStyle=K.cy;x.lineWidth=2;x.setLineDash([5,4]);x.beginPath();x.arc(X[2],sy(c.seq[SEL]),54,0,7);x.stroke();x.setLineDash([])}
+  if(c.nx)tx('next: '+c.names[c.seq[(k+1)%L]].split(' ')[0],X[1],my+94,K.dim,18,'center')}
+ x.restore();
+ tx(k>=0?'REQ #'+(k+1)+'  '+ipOf(c,k)+'  ->  '+c.names[s].split(' ')[0]+(c.rule?'   ['+c.rule+']':''):t<2.8?'Internet client opens a connection':t<5?'Load balancer listens on VIP 198.51.100.10:443':t<8.4?'Backend pool comes online: '+n+' servers':'System ready',W/2,H-30,K.amb,22,'center');
+}
+function seq(t,c){
+ const L=W*.3,R=W*.7,top=H*.28,sc=H*.6/c.T,Y=s=>top+s*sc;
+ [[L,c.a],[R,c.b]].forEach(([px,n])=>{icon(px==L?'pc':'srv',px,top-62,44,K.acc);tx(n,px,top-26,K.acc,20,'center');ln(px,top-20,px,H-20,K.dim,2,[6,6])});
+ let cp='';
+ c.ev.forEach(([a,b,d,lab,lost,cap])=>{
+  if(t<a)return;if(cap)cp=cap;
+  if(d==2){const h=Y(Math.min(t,b))-Y(a);x.globalAlpha=.3;x.fillStyle=K.amb;x.fillRect(L-9,Y(a),18,h);x.globalAlpha=1;tx(lab,L-18,Y(a)+14,K.amb,18,'right');return}
+  const p=Math.min(1,(t-a)/(b-a)),x0=d?R:L,x1=d?L:R,y0=Y(a),y1=Y(b),pp=lost==1?Math.min(p,.55):p,
+  ex=x0+(x1-x0)*pp,ey=y0+(y1-y0)*pp,col=lost?K.red:d?K.cy:K.acc;
+  ln(x0,y0,ex,ey,col,3);pkt(ex,ey,'',col);
+  tx(lab,(x0+x1)/2+(d?18:-18)*0,(y0+y1)/2-12,col,17,'center');
+  if(lost==1&&p>=.55)tx('X LOST',ex,ey+4,K.red,26,'center');
+  if(lost==2&&p>=1)tx('X DROPPED',ex+(d?-70:70),ey,K.red,22,'center');
+ });
+ tx('> '+cp,W*.04,H-16,K.amb,22);
+}
+const PC=()=>[K.acc,K.amb,K.cy],BU=[5,3,4];
+function gantt(t,c){
+ const tot=c.sl[c.sl.length-1][2],cur=Math.min(tot,t/.7),X0=W*.08,u=W*.84/tot,y=H*.32,bh=70,pc=PC();
+ for(let i=0;i<=tot;i++){ln(X0+i*u,y+bh,X0+i*u,y+bh+8,K.ink);tx(i,X0+i*u,y+bh+22,K.dim,18,'center')}
+ ln(X0,y+bh,X0+tot*u,y+bh,K.ink);
+ c.sl.forEach(([p,s,e])=>{if(cur<=s)return;const w=(Math.min(cur,e)-s)*u;x.fillStyle=pc[p];x.fillRect(X0+s*u,y,w,bh);x.strokeStyle=K.bg;x.strokeRect(X0+s*u,y,w,bh);if(w>34)tx('P'+(p+1),X0+s*u+w/2,y+bh/2,K.bg,26,'center')});
+ ln(X0+cur*u,y-14,X0+cur*u,y+bh,K.red,2);tx('t='+cur.toFixed(1),X0+cur*u,y-26,K.red,20,'center');
+ BU.forEach((b,i)=>{box(X0+i*150,H*.62,18,18,pc[i],pc[i]);tx('P'+(i+1)+'  burst '+b,X0+i*150+26,H*.62+9,K.ink,20)});
+ if(cur>=tot){const ct=BU.map((_,i)=>Math.max(...c.sl.filter(s=>s[0]==i).map(s=>s[2])));const w=ct.map((v,i)=>v-BU[i]);
+  tx('WAIT: '+w.map((v,i)=>'P'+(i+1)+'='+v).join('  ')+'   AVG='+(w.reduce((a,b)=>a+b)/3).toFixed(2),X0,H*.76,K.amb,24)}
+ else tx('running: '+(c.sl.find(s=>cur>=s[1]&&cur<s[2])||[0])[0].toString().replace(/^/,'P').replace(/P(\d)/,(m,d)=>'P'+(+d+1)),X0,H*.76,K.amb,24);
+}
+function cw(t,c){
+ const v=c.v,N=v.length,X0=W*.1,X1=W*.93,Y0=H*.84,Y1=H*.2,gx=i=>X0+(X1-X0)*i/(N-1),gy=a=>Y0+(Y1-Y0)*a/13;
+ ln(X0,Y1-10,X0,Y0,K.ink);ln(X0,Y0,X1,Y0,K.ink);
+ for(let a=0;a<=12;a+=2){tx(a,X0-8,gy(a),K.dim,16,'right');ln(X0,gy(a),X1,gy(a),K.dim,1,[2,6])}
+ tx('cwnd (MSS)',X0+6,Y1-14,K.dim,18);tx('RTT',X1,Y0+22,K.dim,18,'right');
+ const cur=Math.min(N-1,t/.8),i=Math.floor(cur),f=cur-i,th=i>c.L?6:8;
+ ln(X0,gy(th),X1,gy(th),K.amb,2,[8,6]);tx('ssthresh='+th,X1,gy(th)-12,K.amb,18,'right');
+ x.beginPath();x.strokeStyle=K.acc;x.lineWidth=3;x.moveTo(gx(0),gy(v[0]));
+ for(let j=1;j<=i;j++)x.lineTo(gx(j),gy(v[j]));
+ let ex=gx(i),ey=gy(v[i]);if(i<N-1){ex=gx(i)+(gx(i+1)-gx(i))*f;ey=gy(v[i])+(gy(v[i+1])-gy(v[i]))*f;x.lineTo(ex,ey)}x.stroke();
+ for(let j=0;j<=i;j++){x.fillStyle=j==c.L?K.red:K.acc;x.fillRect(gx(j)-4,gy(v[j])-4,8,8)}
+ pkt(ex,ey,'',K.amb);
+ const ph=i==c.L?'LOSS DETECTED':v[i]<th?'SLOW START (x2 per RTT)':'CONGESTION AVOIDANCE (+1 per RTT)';
+ tx('cwnd='+v[i]+'   '+ph,W*.1,H*.12,i==c.L?K.red:K.amb,24);
+}
+const G={n:'ABCDEF'.split(''),p:[[.1,.5],[.3,.18],[.4,.62],[.66,.18],[.9,.5],[.66,.86]],e:[[0,1,7],[0,2,9],[0,5,14],[1,2,10],[1,3,15],[2,3,11],[2,5,2],[3,4,6],[4,5,9]]};
+const ST=(()=>{const d=Array(6).fill(1e9),pv=Array(6).fill(-1),dn=[],S=[];d[0]=0;
+ for(let k=0;k<6;k++){let u=-1;d.forEach((v,i)=>{if(!dn.includes(i)&&(u<0||v<d[u]))u=i});dn.push(u);
+  G.e.forEach(([a,b,w])=>[[a,b],[b,a]].forEach(([s,q])=>{if(s==u&&!dn.includes(q)&&d[u]+w<d[q]){d[q]=d[u]+w;pv[q]=u}}));
+  S.push({u,d:[...d],pv:[...pv],dn:[...dn]})}return S})();
+function dj(t){
+ const s=ST[Math.min(5,Math.floor(t/1.6))],P=i=>[W*(.08+G.p[i][0]*.84),H*(.12+G.p[i][1]*.7)];
+ G.e.forEach(([a,b,w])=>{const A=P(a),B=P(b),tree=(s.pv[b]==a||s.pv[a]==b),done=s.dn.includes(a)&&s.dn.includes(b),hot=(a==s.u||b==s.u);
+  ln(A[0],A[1],B[0],B[1],tree&&done?K.acc:hot?K.amb:K.dim,tree&&done?5:hot?3:1.5,tree&&!done?[8,6]:null);
+  tx(w,(A[0]+B[0])/2,(A[1]+B[1])/2-12,K.ink,20,'center')});
+ G.n.forEach((n,i)=>{const [a,b]=P(i),d=s.dn.includes(i),cu=i==s.u;icon('rt',a,b,48,cu?K.amb:d?K.acc:K.dim,cu);tx(n,a,b-38,cu?K.amb:K.ink,24,'center');tx(s.d[i]>1e8?'inf':'d='+s.d[i],a,b+34,K.ink,20,'center')});
+ tx('> VISIT '+G.n[s.u]+' (dist '+s.d[s.u]+'), relax neighbours',W*.04,H-20,K.amb,22);
+}
+
+/* ---- data ---- */
+const RR=(n,s)=>({names:n,seq:s,nx:1,rule:'next in rotation'});
+const sw={a:'SENDER',b:'RECEIVER',T:8,ev:[[0,1,0,'F0',0,'Send F0, then WAIT for its ACK'],[1,2,1,'ACK0'],[2,3,0,'F1',1,'Frame lost in transit'],[3,5,2,'TIMEOUT',0,'No ACK before timer expires'],[5,6,0,'F1 (retx)',0,'Retransmit F1'],[6,7,1,'ACK1',0,'ACK received, send next frame']]};
+const gb={a:'SENDER',b:'RECEIVER',T:8,ev:[[0,1,0,'F0',0,'Window of 3 frames sent back-to-back'],[.4,1.4,0,'F1'],[.8,1.8,0,'F2',1,'F2 lost'],[1.2,2.2,0,'F3',2,'F3 out of order: receiver discards'],[1,2,1,'ACK0'],[1.4,2.4,1,'ACK1'],[2.4,4.4,2,'TIMEOUT F2',0,'Timeout: go back to F2'],[4.4,5.4,0,'F2',0,'Resend F2 and everything after it'],[4.8,5.8,0,'F3'],[5.4,6.4,1,'ACK2'],[5.8,6.8,1,'ACK3',0,'Window slides forward']]};
+const hs={a:'CLIENT',b:'SERVER',T:6,ev:[[0,1,0,'SYN seq=x',0,'1. Client asks to open a connection'],[1.2,2.2,1,'SYN-ACK y,x+1',0,'2. Server agrees, sends own seq'],[2.4,3.4,0,'ACK y+1',0,'3. Client confirms'],[3.4,5.4,2,'ESTABLISHED',0,'Connection open: data can flow']]};
+const R=[1,2,4,8,9,10,11,12];
+const DUR=[5,2,6,3,7,2,4,3,5,2,3,4],N3=['SRV-1','SRV-2','SRV-3'];
+function sim(f){const a=[],sc=[];DUR.forEach((_,k)=>{const cn=[0,1,2].map(i=>a.reduce((n,q,j)=>n+(q==i&&j+1+DUR[j]>k+.4?1:0),0)),v=cn.map(f);a.push(v.indexOf(Math.min(...v)));sc.push(v.map(z=>+z.toFixed(2)+''))});return{seq:a,sc,dur:DUR}}
+const IP=[11,22,33,11,22,44,33,11,55,22,44,11];
+const A=[
+{g:'LOAD BALANCING',n:'Round Robin',key:'Each request goes to the next server in a fixed cycle',T:17.5,loop:8.5,draw:t=>lb(t,RR(['SRV-1','SRV-2','SRV-3'],[0,1,2,0,1,2,0,1,2])),i:{d:'Requests are handed to servers one after another in a circular order, so each server gets an equal share regardless of its load.',s:['Keep a pointer to the next server','Send the incoming request to it','Advance the pointer, wrap after the last server'],c:'O(1) per request, only a pointer of state',u:'DNS round robin, NGINX and HAProxy defaults'}},
+{g:'LOAD BALANCING',n:'Weighted Round Robin',key:'Stronger servers appear more often in the cycle',T:20.5,loop:8.5,draw:t=>lb(t,RR(['SRV-1 w3','SRV-2 w1','SRV-3 w2'],[0,0,0,1,2,2,0,0,0,1,2,2])),i:{d:'Like round robin, but each server occupies as many slots in the cycle as its weight, so bigger machines take more traffic.',s:['Assign each server a weight','Expand the cycle: weight 3 = 3 slots','Walk the cycle, one slot per request'],c:'O(1) per request',u:'Mixed-capacity pools, NGINX weight='}},
+{g:'LOAD BALANCING',n:'Least Connections',key:'New request goes to the server with the fewest active connections',T:20.5,loop:8.5,draw:t=>lb(t,{...sim(c=>c),names:N3,lab:'conn',rule:'fewest connections'}),i:{d:'Sends each request to the server holding the fewest active connections, so long-lived sessions do not pile up on one machine.',s:['Count active connections per server','Pick the lowest count (ties: first)','The count drops when a connection closes'],c:'O(N) per request, O(log N) with a heap',u:'Databases, WebSockets, NGINX least_conn'}},
+{g:'LOAD BALANCING',n:'Weighted Least Conn.',key:'Lowest connections / weight wins',T:20.5,loop:8.5,draw:t=>lb(t,{...sim((c,i)=>c/[3,1,2][i]),names:['SRV-1 w3','SRV-2 w1','SRV-3 w2'],lab:'c/w',rule:'min conn / weight'}),i:{d:'Least Connections adjusted for capacity: score = active connections divided by weight, lowest score wins.',s:['Give each server a weight','Compute connections ÷ weight','Pick the lowest score'],c:'O(N) per request',u:'Mixed hardware, LVS wlc'}},
+{g:'LOAD BALANCING',n:'Least Response Time',key:'Fastest server first, adjusted for its current load',T:20.5,loop:8.5,draw:t=>lb(t,{...sim((c,i)=>[120,40,80][i]*(c+1)),names:['SRV-1 120ms','SRV-2 40ms','SRV-3 80ms'],lab:'score',rt:[120,40,80],rule:'ms × (conn+1)'}),i:{d:'Chooses the server expected to answer fastest by combining its measured response time with its current load.',s:['Measure each server’s average response time','Score = response time × (connections + 1)','Pick the lowest score'],c:'O(N) per request plus health probing',u:'F5 BIG-IP, HAProxy, adaptive balancing'}},
+{g:'LOAD BALANCING',n:'IP Hash',key:'hash(client IP) picks the server, so a client always sticks',T:20.5,loop:8.5,draw:t=>lb(t,{seq:IP.map(v=>v%3),names:N3,cl:IP.map(v=>'203.0.113.'+v),rule:'IP mod 3'}),i:{d:'Hashes the client IP to choose a server, so the same client always reaches the same one (session stickiness).',s:['Take the client IP','hash(IP) mod number of servers','Route to that server'],c:'O(1); changing server count remaps clients (use consistent hashing)',u:'Sticky sessions, caches, NGINX ip_hash'}},
+{g:'LOAD BALANCING',n:'Random',key:'Pick any server at random: stateless and simple',T:20.5,loop:8.5,draw:t=>lb(t,{seq:[2,0,0,1,2,2,1,0,2,0,1,1],names:N3,rule:'random'}),i:{d:'Picks a server at random. No state is kept and the load evens out over many requests.',s:['Generate a random index','Send the request there'],c:'O(1); uneven in the short term',u:'Stateless fronts; “power of two choices” improves it'}},
+{g:'CPU SCHEDULING',n:'Round Robin (q=2)',key:'Run each process for a quantum of 2, then requeue it',T:10.4,draw:t=>gantt(t,{sl:[[0,0,2],[1,2,4],[2,4,6],[0,6,8],[1,8,9],[2,9,11],[0,11,12]]}),i:{d:'Preemptive scheduling: every process runs for at most one time quantum, then goes to the back of the ready queue.',s:['Queue processes in arrival order','Run the head for min(quantum, remaining)','If unfinished, put it at the tail','Repeat until the queue is empty'],c:'Fair, good response time; overhead grows as the quantum shrinks',u:'Time-sharing OSes, packet schedulers'}},
+{g:'CPU SCHEDULING',n:'FCFS',key:'First come, first served: run to completion in arrival order',T:10.4,draw:t=>gantt(t,{sl:[[0,0,5],[1,5,8],[2,8,12]]}),i:{d:'Non-preemptive: the process that arrives first runs until it finishes.',s:['Keep a FIFO queue','Run the head to completion','Take the next one'],c:'Simple, but the convoy effect hurts short jobs',u:'Batch systems, FIFO router queues'}},
+{g:'CPU SCHEDULING',n:'SJF',key:'Shortest burst first gives the lowest average wait',T:10.4,draw:t=>gantt(t,{sl:[[1,0,3],[2,3,7],[0,7,12]]}),i:{d:'Always picks the ready process with the smallest burst time (non-preemptive).',s:['Look at all ready processes','Run the one with the shortest burst','Repeat when it finishes'],c:'Optimal average wait; needs burst prediction, can starve long jobs',u:'Batch schedulers, shortest-job heuristics'}},
+{g:'LINK LAYER (ARQ)',n:'Stop-and-Wait',key:'One frame in flight; wait for ACK or timeout',T:8,draw:t=>seq(t,sw),i:{d:'Sender transmits one frame, then waits for an ACK. If the timer expires first, it resends the same frame.',s:['Send frame, start timer','ACK arrives: send next frame','Timer expires: retransmit'],c:'Utilisation = 1/(1+2a); poor on long links',u:'Simple links, early protocols'}},
+{g:'LINK LAYER (ARQ)',n:'Go-Back-N',key:'Window of N frames; one loss resends all after it',T:8,draw:t=>seq(t,gb),i:{d:'Sender keeps N frames in flight. The receiver accepts only in-order frames; on a loss the sender goes back and resends from the lost frame.',s:['Send up to N frames without waiting','Receiver discards out-of-order frames','On timeout resend the lost frame and all later ones','Cumulative ACKs slide the window'],c:'Window up to 2^n - 1; wastes bandwidth on retransmits',u:'HDLC, simple reliable transfer'}},
+{g:'TRANSPORT',n:'TCP 3-Way Handshake',key:'SYN, SYN-ACK, ACK opens a connection',T:6,draw:t=>seq(t,hs),i:{d:'Both sides agree on initial sequence numbers before any data flows.',s:['Client sends SYN with seq=x','Server replies SYN-ACK with seq=y, ack=x+1','Client sends ACK with ack=y+1'],c:'1.5 round trips before data',u:'Every TCP connection'}},
+{g:'TRANSPORT',n:'TCP Tahoe',key:'On loss, cwnd collapses to 1 and slow start restarts',T:12,draw:t=>cw(t,{v:[...R,1,2,4,6,7,8],L:7}),i:{d:'Congestion window doubles per RTT until ssthresh, then grows by 1. On loss, ssthresh is halved and cwnd restarts at 1.',s:['Slow start: cwnd doubles each RTT','At ssthresh switch to +1 per RTT','On loss: ssthresh = cwnd/2, cwnd = 1'],c:'Simple but harsh on throughput',u:'Historic TCP (1988)'}},
+{g:'TRANSPORT',n:'TCP Reno',key:'On triple dup-ACK, cwnd halves instead of resetting',T:12,draw:t=>cw(t,{v:[...R,6,7,8,9,10,11],L:7}),i:{d:'Like Tahoe, but on three duplicate ACKs it uses fast recovery: cwnd is halved and growth continues linearly.',s:['Slow start up to ssthresh','Congestion avoidance (+1 per RTT)','Triple dup-ACK: ssthresh = cwnd/2, cwnd = ssthresh'],c:'Better throughput than Tahoe',u:'Basis of modern TCP variants'}},
+{g:'ROUTING',n:'Dijkstra',key:'Visit the nearest unvisited node, relax its edges',T:11.1,draw:dj,i:{d:'Finds shortest paths from a source by repeatedly settling the closest unvisited node and updating its neighbours.',s:['Set dist(source)=0, others infinite','Pick unvisited node with smallest dist','Relax each edge: dist(v) = min(dist(v), dist(u)+w)','Repeat until all nodes are settled'],c:'O((V+E) log V) with a heap',u:'OSPF, IS-IS link-state routing'}}
+];
+
+/* ---- UI ---- */
+let cur=A[0],t=0,play=true,sp=1,last=performance.now(),drag=false;
+const side=$('#side');let g='';
+A.forEach((a,i)=>{if(a.g!=g){g=a.g;side.insertAdjacentHTML('beforeend','<h4>['+g+']</h4>')}const b=document.createElement('button');b.textContent=a.n;b.onclick=()=>pick(i);a.el=b;side.appendChild(b)});
+function pick(i){cur=A[i];t=0;SEL=-1;REQ=-1;lastLog='';$('#rd').innerHTML='';$('#lgb').innerHTML='';$('#lg').style.display=cur.loop?'block':'none';A.forEach(a=>a.el.classList.toggle('on',a==cur));
+ $('#ib').innerHTML='<h2>'+cur.n+'<span class="cur">_</span></h2><p class="tag">'+cur.g+'</p><p>'+cur.i.d+'</p><h3>HOW IT WORKS</h3><ol>'+cur.i.s.map(s=>'<li>'+s+'</li>').join('')+'</ol><h3>COMPLEXITY</h3><p>'+cur.i.c+'</p><h3>USED IN</h3><p>'+cur.i.u+'</p>'}
+const setPP=()=>$('#pp').innerHTML=play?'&#10074;&#10074; PAUSE':'&#9654; PLAY';
+$('#pp').onclick=()=>{play=!play;setPP()};
+$('#rs').onclick=()=>{t=0};
+$('#sp').onchange=e=>sp=+e.target.value;
+$('#mn').onclick=()=>document.body.classList.toggle('nc');
+const PAL={'Cisco Blue':['#04101f','#cfe6ff','#3aa0ff','#ffc400','#35e0c8','#ff5470'],'Phosphor':['#060b08','#b8f5c8','#39ff7a','#ffb000','#4dd8ff','#ff4d4d'],'Amber CRT':['#0d0800','#ffd9a0','#ffb000','#ff7a1a','#ffe066','#ff4d4d'],'Synthwave':['#120a24','#f0d9ff','#ff4fd8','#ffe14d','#3df0ff','#ff5470'],'Ice Mono':['#0b0f14','#e6edf3','#9fb3c8','#f0c674','#7fdbff','#ff6b6b'],'Paper':['#d8d4c3','#1a1a1a','#0b6b2f','#a35200','#0a5f7a','#b3261e']};
+const KS=['bg','ink','acc','amb','cy','red'],NM=['Background','Text','Accent 1','Accent 2','Accent 3','Alert'];let PP;
+const mix=(a,b,f)=>{const g=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)),A=g(a),B=g(b);return '#'+A.map((v,i)=>Math.round(v+(B[i]-v)*f).toString(16).padStart(2,'0')).join('')};
+function setIcon(p){const t=(c,w,y,l)=>`<rect class='s' x='16' y='${y}' width='32' height='10' rx='2'/><circle class='${l}' cx='22' cy='${y+5}' r='2.2'/>`;
+ const svg=`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><style>.f{fill:${p[0]}}.b{fill:none;stroke:${p[2]};stroke-width:4}.s{fill:none;stroke:${p[2]};stroke-width:3;stroke-linejoin:round}.l{fill:${p[2]}}.a{fill:${p[3]}}</style><rect class='f' width='64' height='64' rx='12'/><rect class='b' x='5' y='5' width='54' height='54' rx='9'/>${t(0,0,14,'a')}${t(0,0,27,'l')}${t(0,0,40,'l')}<path class='s' d='M38 19.5h6M38 32.5h6M38 45.5h6'/></svg>`;
+ $('#ic').href='data:image/svg+xml,'+encodeURIComponent(svg)}
+function applyPal(p){PP=p;setIcon(p);const r=document.documentElement.style;KS.forEach((k,i)=>r.setProperty('--'+k,p[i]));r.setProperty('--panel',mix(p[0],p[1],.07));r.setProperty('--dim',mix(p[0],p[1],.45));r.setProperty('--line',mix(p[0],p[2],.55));document.querySelectorAll('#cp input').forEach((e,i)=>e.value=p[i]);try{localStorage.setItem('na-pal',JSON.stringify(p))}catch(e){}}
+Object.keys(PAL).forEach(n=>{const b=document.createElement('button');b.className='b';b.textContent=n;b.onclick=()=>applyPal([...PAL[n]]);$('#pr').appendChild(b)});
+NM.forEach((n,i)=>{const l=document.createElement('label');l.innerHTML=n+' <input type="color">';l.lastChild.oninput=e=>{const q=[...PP];q[i]=e.target.value;applyPal(q)};$('#cp').appendChild(l)});
+$('#pl').onclick=()=>{$('#pop').hidden=!$('#pop').hidden};
+applyPal([...PAL['Phosphor']]);
+const sc=$('#sc');sc.onpointerdown=()=>drag=true;sc.onpointerup=()=>drag=false;sc.oninput=()=>{t=sc.value/1000*cur.T};
+function fs(on){document.body.classList.toggle('fs',on);$('#fs').innerHTML=on?'&#9974; EXIT':'&#9974; FULL';
+ try{if(on)document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen().catch(()=>{});else if(document.fullscreenElement)document.exitFullscreen()}catch(e){}}
+$('#fs').onclick=()=>fs(!document.body.classList.contains('fs'));
+document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement&&document.body.classList.contains('fs'))fs(false)});
+addEventListener('keydown',e=>{if(e.code=='Space'&&e.target.tagName!='SELECT'){e.preventDefault();$('#pp').click()}if(e.key=='Escape'&&document.body.classList.contains('fs'))fs(false)});
+let lastLog='';
+const conAt=(c,k)=>c.dur?[0,1,2].map(i=>c.seq.reduce((n,q,j)=>n+(q==i&&j<k&&j+1+c.dur[j]>k+.4?1:0),0)):null,
+stat=(c,k,tt)=>tt<k+1?'IN-FLIGHT':c.dur?(tt<k+1+c.dur[k]?'ACTIVE':'CLOSED'):'200 OK';
+function det(){const c=CFG,k=SEL,el=$('#rd');if(k<0||k>REQ||!c){el.innerHTML='';return}
+ const s=c.seq[k],cn=conAt(c,k),tt=t-INTRO;
+ el.innerHTML=`<h3>REQUEST #${k+1} DETAILS</h3><p>Source: ${ipOf(c,k)}:${pt(k)}</p><p>Dest VIP: 198.51.100.10:443</p><p>Request: ${PATHS[k*3%6]} HTTP/1.1</p><p>Algorithm: ${c.rule}</p>${c.sc?'<p>Scores: '+c.names.map((n,i)=>n.split(' ')[0]+'='+c.sc[k][i]).join(' · ')+' (lowest wins)</p>':''}${cn?'<p>Active conns on arrival: '+cn.join(' / ')+'</p>':''}<p>Chosen: ${c.names[s]} (${sv(s)}:8080)</p><p>Status: ${stat(c,k,tt)}${c.dur?' · session '+c.dur[k]+'s':''}</p><p>Response: ${(c.rt||[60,60,60])[s]+k*7%23} ms</p>`}
+$('#lgb').onclick=e=>{const r=e.target.closest('tr');if(r){SEL=+r.dataset.k;lastLog=''}};
+function logUpd(){const c=CFG,tt=t-INTRO;let h='';for(let k=0;k<=REQ;k++)h+=`<tr class="r${k==SEL?' on':''}" data-k="${k}"><td>${k+1}</td><td>T+${k}s</td><td>${ipOf(c,k)}:${pt(k)}</td><td>${PATHS[k*3%6]}</td><td>${c.names[c.seq[k]].split(' ')[0]} ${sv(c.seq[k])}</td><td>${stat(c,k,tt)}</td></tr>`;
+ if(h!==lastLog){lastLog=h;$('#lgb').innerHTML=h;$('#lg').scrollTop=1e5;det()}}
+function frame(n){
+ const dt=Math.min(.05,(n-last)/1e3);last=n;if(play&&!drag)t+=dt*sp;if(t>=cur.T)t=cur.loop||0;
+ if(W<2||H<2)fit();cols();x.setTransform(devicePixelRatio||1,0,0,devicePixelRatio||1,0,0);x.globalAlpha=1;x.clearRect(0,0,W,H);
+ tx('> '+cur.n.toUpperCase()+' :: '+cur.key,W*.04,26,K.ink,W<600?16:22);
+ try{cur.draw(t)}catch(e){tx('render error: '+e.message,W*.04,H/2,K.red,20)}
+ if(cur.loop&&CFG)logUpd();if(!drag)sc.value=t/cur.T*1000;$('#tm').textContent=t.toFixed(1)+'s';
+ requestAnimationFrame(frame)}
+pick(0);setPP();requestAnimationFrame(frame);
+</script></body></html>
