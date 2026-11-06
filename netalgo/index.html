@@ -43,8 +43,38 @@ body.fs .stage{position:fixed;inset:0;z-index:50}
 #lg th{position:sticky;top:0;background:var(--panel);color:var(--amb);text-align:left;font-weight:normal;padding:2px 10px;border-bottom:1px solid var(--line)}
 #lg td{padding:1px 10px}#lg tr.r{cursor:pointer}#lg tr.r:hover{color:var(--acc)}#lg tr.on,#lg tr.on:hover{background:var(--acc);color:var(--bg)}
 body.fs #lg{display:none!important}
+#boot{position:fixed;inset:0;z-index:999;background:var(--bg);color:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;font:20px/1.3 'VT323','Courier New',monospace;transition:opacity .5s,visibility .5s}
+#boot.done{opacity:0;visibility:hidden;pointer-events:none}
+#boot::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(rgba(0,0,0,.09) 0 1px,transparent 1px 3px)}
+.bt{color:var(--acc);font-size:34px;letter-spacing:3px}
+.bt i{font-style:normal;color:var(--amb);animation:bl 1s steps(2) infinite}
+.bn{position:relative;display:flex;align-items:center;width:min(360px,80vw)}
+.nd{width:34px;height:34px;border:2px solid var(--acc);border-radius:6px;background:var(--bg);position:relative;box-shadow:3px 3px 0 var(--acc)}
+.nd.l{border-color:var(--amb);box-shadow:3px 3px 0 var(--amb)}
+.nd::after{content:"";position:absolute;left:6px;top:6px;width:5px;height:5px;border-radius:50%;background:var(--acc);animation:bl 1s steps(2) infinite}
+.wire{flex:1;height:2px;background:var(--dim)}
+.pk{position:absolute;top:50%;left:3%;width:12px;height:12px;margin-top:-6px;background:var(--amb);box-shadow:0 0 12px var(--amb);animation:hop 1.4s linear infinite}
+@keyframes hop{0%{left:3%;opacity:0}10%,90%{opacity:1}100%{left:93%;opacity:0}}
+.bar{width:min(360px,80vw);height:16px;border:2px solid var(--line);padding:2px}
+.bar b{display:block;height:100%;width:0;background:var(--acc);animation:ld 1.8s steps(18) forwards}
+@keyframes ld{to{width:100%}}
+#bl{width:min(360px,80vw);color:var(--dim);min-height:70px}
+#bl div{opacity:0;animation:sh .01s forwards}
+@keyframes sh{to{opacity:1}}
 #rd h3{color:var(--cy)}#rd:not(:empty){margin-bottom:14px;padding-bottom:6px;border-bottom:2px solid var(--line)}#rd p{margin:2px 0}
 </style></head><body>
+  <div id="boot">
+ <div class="bt">NETALGO//VIEWER<i>_</i></div>
+ <div class="bn"><div class="nd"></div><div class="wire"></div><div class="nd l"></div><div class="wire"></div><div class="nd"></div><span class="pk"></span></div>
+ <div class="bar"><b></b></div>
+ <div id="bl">
+  <div style="animation-delay:.2s">&gt; initialising canvas ... OK</div>
+  <div style="animation-delay:.7s">&gt; loading algorithms [11] ... OK</div>
+  <div style="animation-delay:1.2s">&gt; bringing links up ... OK</div>
+  <div style="animation-delay:1.6s;color:var(--acc)">&gt; system ready</div>
+ </div>
+</div>
+<script>try{const p=JSON.parse(localStorage.getItem('na-pal'))||['#060b08','#b8f5c8','#39ff7a','#ffb000','#4dd8ff','#ff4d4d'],r=document.documentElement.style;['bg','ink','acc','amb','cy','red'].forEach((k,i)=>r.setProperty('--'+k,p[i]));r.setProperty('--dim','#888');r.setProperty('--line',p[2])}catch(e){}</script>
 <header><span><b>NETALGO//VIEWER</b> <i>v1.0 · network &amp; scheduling algorithms</i></span><button class="b" id="pl">&#9679; PALETTE</button></header>
 <div id="pop" hidden><div id="pr"></div><div id="cp"></div></div>
 <div class="app">
@@ -250,4 +280,8 @@ function frame(n){
  if(cur.loop&&CFG)logUpd();if(!drag)sc.value=t/cur.T*1000;$('#tm').textContent=t.toFixed(1)+'s';
  requestAnimationFrame(frame)}
 pick(0);setPP();requestAnimationFrame(frame);
+(()=>{const b=document.getElementById('boot'),t0=performance.now();let gone=0;
+ const hide=()=>{if(gone)return;gone=1;t=0;b.classList.add('done');setTimeout(()=>b.remove(),600)};
+ addEventListener('load',()=>setTimeout(hide,Math.max(0,1900-(performance.now()-t0))));
+ setTimeout(hide,5000)})();
 </script></body></html>
