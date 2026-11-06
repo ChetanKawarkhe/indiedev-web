@@ -551,6 +551,18 @@ footer{z-index:1}
 .shots{scrollbar-width:none;-ms-overflow-style:none;cursor:grab}
 .shots::-webkit-scrollbar{display:none}
 .shot img{-webkit-user-drag:none;user-select:none}
+
+/* wide logos (NetAlgo) */
+.ico.wide{width:auto;height:44px;border-radius:10px;font-size:1rem}
+.ico.wide img{width:auto;height:100%;object-fit:contain}
+.ico.lgi.wide{width:auto;height:60px;border-radius:12px}
+
+/* multiple projects */
+#feat{display:grid;gap:10px}
+.pblock{margin-bottom:72px}.pblock:last-child{margin-bottom:0}
+.gh{font-size:1.5rem;margin:40px 0 6px}
+/* landscape (desktop) screenshots */
+.shots.land .shot{flex:0 0 clamp(300px,46vw,560px);aspect-ratio:2.1/1}
 </style>
 </head>
 <body>
@@ -653,7 +665,7 @@ footer{z-index:1}
       <div><b data-n="1">0</b><span>App live</span></div>
       <div><b data-n="6">0</b><span>Core technologies</span></div>
     </div>
-    <div class="feat" id="feat"></div>
+    <div id="feat"></div>
   </aside>
 </div></div>
 
@@ -666,9 +678,6 @@ footer{z-index:1}
   <h2 class="rv">Projects</h2>
   <p class="sub rv">Apps I have built and published. Open one for its details.</p>
   <div id="projList"></div>
-  <h2 class="rv" style="margin-top:56px;font-size:1.6rem">TradeBook Journal screenshots</h2>
-  <p class="sub rv" style="margin-bottom:14px">Tap a screenshot to zoom in.</p>
-  <div class="shots rv" id="shots"></div>
 </div></section>
 
 <section id="experience"><div class="wrap">
@@ -745,18 +754,21 @@ const projects=[{
   name:"TradeBook Journal",
   desc:"A trading journal to log trades, track performance and review your discipline over time.",
   tags:["React Native","SQLite","Fintech"],
-  link:"https://indiedev.co.in/tradebook/",                 // keep: existing app pages stay intact
-  icon:"assets/tradebook-icon.png",  // paste your app icon here
-  short:"TB"
+  link:"https://indiedev.co.in/tradebook/",
+  icon:"assets/tradebook-icon.png",
+  short:"TB",
+  shots:["./assets/tradebook-1.png","./assets/tradebook-2.png","./assets/tradebook-3.png","./assets/tradebook-4.png","./assets/tradebook-5.png","./assets/tradebook-6.png"]
+},{
+  name:"NetAlgo",
+  desc:"An interactive visualizer for networking and scheduling algorithms. Watch load balancing, CPU scheduling, ARQ, TCP congestion control and routing play out step by step, with playback controls, speed settings and switchable retro terminal themes.",
+  tags:["Networking","Algorithms","Visualizer","Themes"],
+  link:"https://indiedev.co.in/netalgo/",
+  icon:"assets/netalgo-logo.png",
+  short:"NetAlgo",
+  wide:true,        // wide banner logo
+  landscape:true,   // desktop-shaped screenshots
+  shots:["./assets/netalgo-1.png","./assets/netalgo-2.png","./assets/netalgo-3.png","./assets/netalgo-4.png","./assets/netalgo-5.png","./assets/netalgo-6.png"]
 }];
-const screenshots = [
-    "./assets/tradebook-1.png",
-    "./assets/tradebook-2.png",
-    "./assets/tradebook-3.png",
-    "./assets/tradebook-4.png",
-    "./assets/tradebook-5.png",
-    "./assets/tradebook-6.png"
-];
 const D="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/icons/";
 const skills=[{n:".NET",i:"dotnetcore/dotnetcore-original.svg"},{n:"C#",i:"csharp/csharp-original.svg"},{n:"React JS",i:"react/react-original.svg"},{n:"React Native",i:"react/react-original.svg"},{n:"SQL Server",i:"microsoftsqlserver/microsoftsqlserver-plain.svg"},{n:"SQLite",i:"sqlite/sqlite-original.svg"},{n:"REST APIs",e:"🔌"},{n:"Fintech",e:"💹"}];
 const roles=["fintech apps.","mobile apps.","APIs and databases.","things that ship."];
@@ -764,22 +776,17 @@ const roles=["fintech apps.","mobile apps.","APIs and databases.","things that s
 
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const LQ='<span class="lq"><i></i><i></i><i></i></span>';
-const ico=(p,c='')=>`<span class="ico ${c}">${p.icon?`<img src="${p.icon}" alt="${p.name} icon" onerror="this.replaceWith(document.createTextNode('${p.short}'))">`:p.short}</span>`;
+const ico=(p,c='')=>`<span class="ico ${c} ${p.wide?'wide':''}">${p.icon?`<img src="${p.icon}" alt="${p.name} icon" onerror="this.replaceWith(document.createTextNode('${p.short}'))">`:p.short}</span>`;
 
 $('#rView').href=RESUME_VIEW;$('#rDl').href=RESUME_DOWNLOAD;
 if(RESUME_DOWNLOAD===RESUME_VIEW)$('#rDl').setAttribute('download','Chetan_Kawarkhe.pdf');
-$('#feat').innerHTML=projects.map(p=>`${ico(p)}<div class="t"><b>${p.name}</b><small>Live app</small></div><a class="btn sage sm liquid" href="${p.link}">${LQ}<span>Open</span><span class="ic">→</span></a>`).join('');
-$('#projList').innerHTML=projects.map(p=>`<article class="proj liquid rv">${LQ}${ico(p,'lgi')}<div><h3>${p.name}</h3><p>${p.desc}</p><div class="tags">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div><a class="btn sage liquid" href="${p.link}">${LQ}<span>Open ${p.name}</span><span class="ic">→</span></a></div></article>`).join('');
-<!-- $('#shots').innerHTML=screenshots.map((s,i)=>`<button class="shot" data-i="${i}" aria-label="Zoom screenshot ${i+1}"><span class="ph">Add ${s}</span><img src="${s}" alt="TradeBook Journal screenshot ${i+1}" loading="lazy" onerror="this.remove()"><span class="zh">⤢</span></button>`).join(''); -->
- $('#shots').innerHTML = screenshots.map((s, i) => `
-    <button class="shot" data-i="${i}" aria-label="Zoom screenshot ${i+1}">
-        <span class="ph">Add ${s}</span>
-        <img src="${s}" 
-             alt="TradeBook Journal screenshot ${i+1}" 
-             loading="lazy">
-        <span class="zh">⤢</span>
-    </button>
-`).join('');
+$('#feat').innerHTML=projects.map(p=>`<div class="feat">${ico(p)}<div class="t"><b>${p.name}</b><small>Live app</small></div><a class="btn sage sm liquid" href="${p.link}">${LQ}<span>Open</span><span class="ic">→</span></a></div>`).join('');
+$('#projList').innerHTML=projects.map(p=>`<div class="pblock">
+<article class="proj liquid rv">${LQ}${ico(p,'lgi')}<div><h3>${p.name}</h3><p>${p.desc}</p><div class="tags">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div><a class="btn sage liquid" href="${p.link}">${LQ}<span>Open ${p.name}</span><span class="ic">→</span></a></div></article>
+<h3 class="gh rv">${p.name} screenshots</h3>
+<p class="sub rv" style="margin-bottom:14px">Swipe or drag to browse. Tap a screenshot to zoom in.</p>
+<div class="shots rv ${p.landscape?'land':''}">${p.shots.map((s,i)=>`<button class="shot" aria-label="Zoom ${p.name} screenshot ${i+1}"><span class="ph">Add ${s}</span><img src="${s}" alt="${p.name} screenshot ${i+1}" loading="lazy"><span class="zh">⤢</span></button>`).join('')}</div>
+</div>`).join('');
 const sic=(s,e)=>s.i?`<img src="${D+s.i}" alt="" onerror="this.remove()">`:`<em>${s.e}</em>`;
 $('#skills').innerHTML=skills.map(s=>`<span>${s.i?sic(s):s.e}${s.n}</span>`).join('');
 $('#vx').innerHTML=[...skills,...skills,...skills].map(s=>`<div class="vi">${sic(s)}<span>${s.n}</span></div>`).join('');
@@ -935,11 +942,11 @@ const tl=$('#tl');addEventListener('scroll',()=>{const r=tl.getBoundingClientRec
 
 /* zoomable lightbox: wheel, pinch, drag, double click, buttons, arrows */
 const lb=$('#lb'),im=$('#lbi'),st=$('#st');let idx=0,sc=1,tx=0,ty=0;
-const imgs=()=>$$('.shot img');
+let gal=null;const imgs=()=>gal?[...gal.querySelectorAll('.shot img')]:[];
 function ap(){im.style.transform=`translate(${tx}px,${ty}px) scale(${sc})`;lb.classList.toggle('z',sc>1)}
 function zoom(s){sc=Math.min(6,Math.max(1,s));if(sc===1){tx=ty=0}ap()}
 function show(i){const l=imgs();if(!l.length)return;idx=(i+l.length)%l.length;im.src=l[idx].src;sc=1;tx=ty=0;ap();$('#cnt').textContent=(idx+1)+' / '+l.length}
-$('#shots').addEventListener('click',e=>{const b=e.target.closest('.shot');if(!b||!b.querySelector('img'))return;const l=imgs();show(l.indexOf(b.querySelector('img')));lb.classList.add('on');document.body.style.overflow='hidden'});
+$('#projList').addEventListener('click',e=>{const b=e.target.closest('.shot');if(!b||!b.querySelector('img'))return;gal=b.parentElement;show(imgs().indexOf(b.querySelector('img')));lb.classList.add('on');document.body.style.overflow='hidden'});
 const close=()=>{lb.classList.remove('on');document.body.style.overflow=''};
 $('#zx').onclick=close;$('#zi').onclick=()=>zoom(sc*1.5);$('#zo').onclick=()=>zoom(sc/1.5);$('#pv').onclick=()=>show(idx-1);$('#nx').onclick=()=>show(idx+1);
 st.addEventListener('wheel',e=>{e.preventDefault();zoom(sc*(e.deltaY<0?1.15:.87))},{passive:false});
@@ -967,11 +974,11 @@ if (resumeBtn) {
 }
 
 /* screenshots: drag with the mouse to scroll (trackpad and touch swipe already work) */
-const sh=$('#shots');let sd=false,sx0=0,sl0=0,sm=0;
-sh.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse')return;sd=true;sm=0;sx0=e.clientX;sl0=sh.scrollLeft;sh.style.scrollSnapType='none';sh.style.cursor='grabbing'});
-addEventListener('pointermove',e=>{if(!sd)return;const d=e.clientX-sx0;if(Math.abs(d)>4)sm=1;sh.scrollLeft=sl0-d});
-addEventListener('pointerup',()=>{if(!sd)return;sd=false;sh.style.scrollSnapType='';sh.style.cursor=''});
-sh.addEventListener('click',e=>{if(sm){e.stopPropagation();e.preventDefault();sm=0}},true);
+$$('.shots').forEach(sh=>{let sd=false,sx0=0,sl0=0,sm=0;
+ sh.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse')return;sd=true;sm=0;sx0=e.clientX;sl0=sh.scrollLeft;sh.style.scrollSnapType='none';sh.style.cursor='grabbing'});
+ addEventListener('pointermove',e=>{if(!sd)return;const d=e.clientX-sx0;if(Math.abs(d)>4)sm=1;sh.scrollLeft=sl0-d});
+ addEventListener('pointerup',()=>{if(!sd)return;sd=false;sh.style.scrollSnapType='';sh.style.cursor=''});
+ sh.addEventListener('click',e=>{if(sm){e.stopPropagation();e.preventDefault();sm=0}},true)});
 </script>
 </body>
 </html>
