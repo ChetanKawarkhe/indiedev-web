@@ -98,9 +98,6 @@ header.nav{position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:
 /* hero */
 .hero{position:relative;overflow:hidden;padding:30px 0 64px}
 .hbg{position:absolute;inset:0;pointer-events:none;z-index:0}
-.hbg::before{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:56px 56px;-webkit-mask-image:radial-gradient(ellipse 80% 90% at 70% 40%,#000,transparent);mask-image:radial-gradient(ellipse 80% 90% at 70% 40%,#000,transparent);animation:gd 40s linear infinite}
-@keyframes gd{to{background-position:56px 56px}}
-.hbg .o1,.hbg .o2{position:absolute;border:1px solid var(--ac);opacity:.35}
 .hbg .o1{width:380px;height:380px;border-radius:50%;border-style:dashed;right:-60px;top:-120px;animation:spin 70s linear infinite}
 .hbg .o2{width:150px;height:150px;left:46%;bottom:-40px;transform:rotate(45deg);animation:sq 18s ease-in-out infinite alternate}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -315,10 +312,7 @@ footer a.fl svg{width:18px;height:18px;flex:none}
 .feat:hover .btn .ic{transform:translate(2px,-2px)}
 @media(prefers-reduced-motion:reduce){#ld .lt div{animation:none!important;opacity:1!important}}
 @media(max-width:560px){.feat{flex-wrap:wrap}.feat .btn{width:100%}}
-.hbg .glow,.hbg .gl{position:absolute;inset:0;opacity:0;transition:opacity .5s}
-.hbg .glow{background:radial-gradient(380px circle at var(--mx,70%) var(--my,30%),color-mix(in srgb,var(--ac) 8%,transparent),transparent 65%)}
-.hbg .gl{background-image:linear-gradient(color-mix(in srgb,var(--ac) 55%,transparent) 1px,transparent 1px),linear-gradient(90deg,color-mix(in srgb,var(--ac) 55%,transparent) 1px,transparent 1px);background-size:56px 56px;-webkit-mask-image:radial-gradient(200px circle at var(--mx,70%) var(--my,30%),#000,transparent);mask-image:radial-gradient(200px circle at var(--mx,70%) var(--my,30%),#000,transparent);animation:gd 40s linear infinite}
-.hero:hover .glow,.hero:hover .gl{opacity:1}
+
 .hcard{position:relative}
 .hcard::after{content:"";position:absolute;inset:0;border:1px solid var(--ac);border-radius:12px;opacity:0;transition:opacity .4s;pointer-events:none}
 .hcard:hover::after{opacity:1}
@@ -357,7 +351,7 @@ footer a.fl svg{width:18px;height:18px;flex:none}
 
 <main>
 <div class="hero" id="top">
-  <div class="hbg" aria-hidden="true"><span class="glow"></span><span class="gl"></span><span class="o1"></span><span class="o2"></span><span class="dash d1"></span><span class="dash d2"></span><span class="dash d3"></span><span class="pl p1">+</span><span class="pl p2">+</span><span class="pl p3">+</span></div>
+  <div class="hbg" aria-hidden="true"><span class="o1"></span><span class="o2"></span><span class="dash d1"></span><span class="dash d2"></span><span class="dash d3"></span><span class="pl p1">+</span><span class="pl p2">+</span><span class="pl p3">+</span></div>
   <div class="wrap hg">
     <div>
       <p class="hi rv">// Hi, I'm <b>Chetan Kawarkhe</b></p>
