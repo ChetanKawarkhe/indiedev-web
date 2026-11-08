@@ -16,7 +16,7 @@
 :root{--ac:#FF645C;--on-ac:#0D0D0D;--ac-d:color-mix(in srgb,var(--ac) 86%,#000);--dk:#0D0D0D;
 --bg:#fff;--card:#F5F5F3;--ink:#0D0D0D;--mute:#6B6B67;--line:#E3E3DF;--line2:#C8C8C2;
 --g:clamp(16px,4vw,64px);--mono:'JetBrains Mono',ui-monospace,monospace;--ease:cubic-bezier(.2,.9,.2,1)}
-[data-theme=dark]{--bg:#0D0D0D;--card:#151515;--ink:#F4F4F2;--mute:#9A9A96;--line:#262626;--line2:#3A3A3A}
+[data-theme=dark]{--bg:#1A1A1A;--card:#151515;--ink:#F4F4F2;--mute:#9A9A96;--line:#262626;--line2:#3A3A3A}
 *{box-sizing:border-box;margin:0}
 html{scroll-behavior:smooth;scroll-padding-top:76px;scrollbar-width:thin;scrollbar-color:var(--line2) var(--bg)}
 ::-webkit-scrollbar{width:10px}::-webkit-scrollbar-track{background:var(--bg)}
@@ -98,14 +98,6 @@ header.nav{position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:
 
 /* hero */
 .hero{position:relative;overflow:hidden;padding:30px 0 64px}
-.hbg{position:absolute;inset:0;pointer-events:none;z-index:0}
-.hbg .o1{width:380px;height:380px;border-radius:50%;border-style:dashed;right:-60px;top:-120px;animation:spin 70s linear infinite}
-.hbg .o2{width:150px;height:150px;left:46%;bottom:-40px;transform:rotate(45deg);animation:sq 18s ease-in-out infinite alternate}
-@keyframes spin{to{transform:rotate(360deg)}}
-@keyframes sq{from{transform:rotate(45deg) translate(0,0)}to{transform:rotate(135deg) translate(24px,-30px)}}
-.hbg .pl{position:absolute;color:var(--ac);font:500 1.1rem var(--mono);opacity:.5;animation:blk 3.2s ease-in-out infinite}
-.hbg .p1{left:8%;top:30%}.hbg .p2{left:52%;top:12%;animation-delay:-1s}.hbg .p3{left:90%;top:62%;animation-delay:-2s}
-@keyframes blk{50%{opacity:.08}}
 .hg{position:relative;z-index:1;display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center}
 .hg>*{min-width:0}
 .hi{font:500 1rem var(--mono);color:var(--mute);margin-bottom:12px}.hi b{color:var(--ink);font-weight:500;font-size:1.12em}
@@ -359,7 +351,6 @@ body.ld{overflow:hidden}
 
 <main>
 <div class="hero" id="top">
-  <div class="hbg" aria-hidden="true"><span class="o1"></span><span class="o2"></span><span class="pl p1">+</span><span class="pl p2">+</span><span class="pl p3">+</span></div>
   <div class="wrap hg">
     <div>
       <p class="hi rv">// Hi, I'm <b>Chetan Kawarkhe</b></p>
@@ -719,9 +710,6 @@ $$('.shots').forEach(sh=>{let sd=false,sx0=0,sl0=0,sm=0;
 
 /* copy email */
 $('#copyMail').onclick=async e=>{const b=e.currentTarget;try{await navigator.clipboard.writeText('chetankawarkhe@gmail.com');b.textContent='Copied ✓'}catch(_){b.textContent='chetankawarkhe@gmail.com'}setTimeout(()=>b.textContent='Copy email',1800)};
-/* hero hover glow follows the cursor */
-const heroEl=$('#top');
-heroEl.addEventListener('pointermove',e=>{const r=heroEl.getBoundingClientRect();heroEl.style.setProperty('--mx',e.clientX-r.left+'px');heroEl.style.setProperty('--my',e.clientY-r.top+'px')});
 </script>
 </body>
 </html>

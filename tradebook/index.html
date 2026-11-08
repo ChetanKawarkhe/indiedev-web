@@ -6,10 +6,10 @@
 <title>TradeBook Journal – Your trading journal for Android</title>
 <meta name="description" content="TradeBook Journal logs your trades, scores your discipline and shows the patterns behind your wins and losses. Track. Analyze. Improve.">
 <link rel="canonical" href="https://indiedev.co.in/tradebook/">
-<link rel="icon" href="images/favicon.png">
+<link rel="icon" href="assets/favicon.png">
 <meta property="og:title" content="TradeBook Journal">
 <meta property="og:description" content="Track. Analyze. Improve. A trading journal for Android.">
-<meta property="og:image" content="https://indiedev.co.in/tradebook/images/banner.png">
+<meta property="og:image" content="https://indiedev.co.in/tradebook/assets/banner.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Instrument+Sans:wght@400;500;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
@@ -226,7 +226,7 @@ footer::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;back
 </head>
 <body class="ld">
 <div id="loader" role="status" aria-label="Loading TradeBook"><div class="lc">
-  <img class="lm" src="images/logo-mark.png" alt="">
+  <img class="lm" src="assets/logo-mark.png" alt="">
   <div class="lname"><b>Trade</b>Book</div>
   <svg class="lchart" viewBox="0 0 220 90" aria-hidden="true">
     <rect style="--i:0" x="8" y="66" width="28" height="24" rx="5" fill="#D96868"/>
@@ -242,7 +242,7 @@ footer::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;back
 <canvas id="bg" aria-hidden="true"></canvas>
 
 <nav>
-  <a href="#top" class="brand" aria-label="TradeBook home"><img src="images/logo-mark.png" alt=""><span class="bn"><b>Trade</b>Book</span></a>
+  <a href="#top" class="brand" aria-label="TradeBook home"><img src="assets/logo-mark.png" alt=""><span class="bn"><b>Trade</b>Book</span></a>
   <div class="links"><span class="pill"></span><a href="#features">Features</a><a href="#analytics">Analytics</a><a href="#screens">Screens</a></div>
   <div class="right">
     <button class="tg" id="tg" aria-label="Switch between light and dark mode"><i></i><i></i><i></i>
@@ -269,7 +269,7 @@ footer::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;back
       <p class="soon rv" style="--d:.4s">Now live on Google Play. Download and start journaling today.</p>
     </div>
     <div class="stage rv" data-r="r" style="--d:.2s">
-      <img class="poster" data-lb="0" src="images/shot-1.jpg" alt="TradeBook dashboard in light and dark mode">
+      <img class="poster" data-lb="0" src="assets/shot-1.jpg" alt="TradeBook dashboard in light and dark mode">
       <div class="chip a">Trader score<b class="up">87/100</b></div>
       <div class="chip b">Plan adherence<b class="dn">100%</b></div>
     </div>
@@ -326,7 +326,7 @@ footer::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;back
 
 <section id="get">
   <div class="wrap getc">
-    <img class="bn2 rv" data-r="s" data-lb="-1" src="images/banner.png" alt="TradeBook – Your Trading Journal. Track. Analyze. Improve.">
+    <img class="bn2 rv" data-r="s" data-lb="-1" src="assets/banner.png" alt="TradeBook – Your Trading Journal. Track. Analyze. Improve.">
     <h2 class="rv">Download TradeBook on Google Play</h2>
     <p class="sub rv">Start logging trades, scoring your discipline and spotting your patterns today.</p>
     <div class="cta rv">
@@ -343,7 +343,7 @@ footer::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;back
   <div class="wrap">
     <div class="fg">
       <div>
-        <a class="brand" href="https://indiedev.co.in/tradebook/"><img src="images/logo-mark.png" alt=""><span class="bn"><b>Trade</b>Book</span></a>
+        <a class="brand" href="https://indiedev.co.in/tradebook/"><img src="assets/logo-mark.png" alt=""><span class="bn"><b>Trade</b>Book</span></a>
         <p>A trading journal for Android.<br>Track. Analyze. Improve.</p>
         <a class="mail" href="mailto:tradebookjournal@gmail.com"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 8l9 6 9-6"/></svg>tradebookjournal@gmail.com</a>
       </div>
@@ -409,13 +409,13 @@ $('#feat').innerHTML=F.map((f,i)=>`<div class="card rv" data-tilt style="--d:${(
 
 /* screens */
 const S=[['Dashboard and P&L calendar','shot-1'],['Analytics in light and dark','shot-2'],['Insights and patterns','shot-3'],['Your process, made visible','shot-4'],['Daily journal','shot-5'],['Playbook and trade history','shot-6']];
-$('#shots').innerHTML=S.map((s,i)=>`<div class="shot" data-lb="${i}"><img loading="lazy" src="images/${s[1]}.jpg" alt="${s[0]}">${s[0]}</div>`).join('');
+$('#shots').innerHTML=S.map((s,i)=>`<div class="shot" data-lb="${i}"><img loading="lazy" src="assets/${s[1]}.jpg" alt="${s[0]}">${s[0]}</div>`).join('');
 const sh=$('#shots');
 $('#sp').onclick=()=>sh.scrollBy({left:-480,behavior:'smooth'});
 $('#sn').onclick=()=>sh.scrollBy({left:480,behavior:'smooth'});
 
 /* lightbox */
-const lb=$('#lb'),li=$('img',lb),cap=$('.cap',lb);let ci=0,list=S.map(s=>[s[0],`images/${s[1]}.jpg`]).concat([['TradeBook – Track. Analyze. Improve.','images/banner.png']]);
+const lb=$('#lb'),li=$('img',lb),cap=$('.cap',lb);let ci=0,list=S.map(s=>[s[0],`assets/${s[1]}.jpg`]).concat([['TradeBook – Track. Analyze. Improve.','assets/banner.png']]);
 function show(i){ci=(i+list.length)%list.length;lb.classList.remove('z');li.style.opacity=0;setTimeout(()=>{li.src=list[ci][1];li.alt=list[ci][0];li.style.opacity=1},150);cap.textContent=`${list[ci][0]}  ·  ${ci+1} / ${list.length}`}
 function open(i){show(i);lb.classList.add('open');document.body.style.overflow='hidden'}
 function close(){lb.classList.remove('open','z');document.body.style.overflow=''}
