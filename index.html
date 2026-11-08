@@ -12,7 +12,8 @@
 <style>
 /* ===== ACCENT: change --ac here and the whole site follows ===== */
 /* --on-ac is the text colour used on accent surfaces. If you choose a darker accent, change it to white. */
-:root{--ac:#f25f5c;--on-ac:#0D0D0D;--ac-d:color-mix(in srgb,var(--ac) 86%,#000);--dk:#0D0D0D;
+/* 93C572  -- pistachio #FF645C */
+:root{--ac:#FF645C;--on-ac:#0D0D0D;--ac-d:color-mix(in srgb,var(--ac) 86%,#000);--dk:#0D0D0D;
 --bg:#fff;--card:#F5F5F3;--ink:#0D0D0D;--mute:#6B6B67;--line:#E3E3DF;--line2:#C8C8C2;
 --g:clamp(16px,4vw,64px);--mono:'JetBrains Mono',ui-monospace,monospace;--ease:cubic-bezier(.2,.9,.2,1)}
 [data-theme=dark]{--bg:#0D0D0D;--card:#151515;--ink:#F4F4F2;--mute:#9A9A96;--line:#262626;--line2:#3A3A3A}
@@ -102,9 +103,6 @@ header.nav{position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:
 .hbg .o2{width:150px;height:150px;left:46%;bottom:-40px;transform:rotate(45deg);animation:sq 18s ease-in-out infinite alternate}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes sq{from{transform:rotate(45deg) translate(0,0)}to{transform:rotate(135deg) translate(24px,-30px)}}
-.hbg .dash{position:absolute;left:-140px;height:2px;width:140px;background:var(--ac);opacity:.55;animation:run 9s linear infinite}
-.hbg .d1{top:168px}.hbg .d2{top:280px;animation-duration:13s;animation-delay:-5s}.hbg .d3{top:392px;animation-duration:11s;animation-delay:-8s}
-@keyframes run{to{transform:translateX(calc(100vw + 280px))}}
 .hbg .pl{position:absolute;color:var(--ac);font:500 1.1rem var(--mono);opacity:.5;animation:blk 3.2s ease-in-out infinite}
 .hbg .p1{left:8%;top:30%}.hbg .p2{left:52%;top:12%;animation-delay:-1s}.hbg .p3{left:90%;top:62%;animation-delay:-2s}
 @keyframes blk{50%{opacity:.08}}
@@ -306,19 +304,29 @@ footer a.fl svg{width:18px;height:18px;flex:none}
  .grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
  .rtop .mono{display:none}.rtools{width:100%;justify-content:space-between}
 }
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}.ln>span,.big span{transform:none}}
-.feat .btn{flex:none;white-space:nowrap;pointer-events:none}
-.feat:hover .btn.ac{background:var(--ac-d);border-color:var(--ac-d)}
-.feat:hover .btn .ic{transform:translate(2px,-2px)}
-@media(prefers-reduced-motion:reduce){#ld .lt div{animation:none!important;opacity:1!important}}
+@media(prefers-reduced-motion:reduce){
+ *:not(#ld):not(#ld *),*:not(#ld):not(#ld *)::before,*:not(#ld):not(#ld *)::after{animation:none!important;transition:none!important}
+ .rv{opacity:1;transform:none}.ln>span,.big span{transform:none}
+}
 @media(max-width:560px){.feat{flex-wrap:wrap}.feat .btn{width:100%}}
 
 .hcard{position:relative}
 .hcard::after{content:"";position:absolute;inset:0;border:1px solid var(--ac);border-radius:12px;opacity:0;transition:opacity .4s;pointer-events:none}
 .hcard:hover::after{opacity:1}
+/* fix: stop wide screenshot rows from stretching the page on small screens */
+.pside,#projList,.pcard,.hg>*,.job>*,.fg>*{min-width:0}
+.shots{max-width:100%;overscroll-behavior-x:contain}
+@media(max-width:900px){
+ .pj,.hg,.job{grid-template-columns:minmax(0,1fr)}
+ .fg{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:560px){.fg{grid-template-columns:minmax(0,1fr)}}
+html,body{max-width:100%}
+body.ld{overflow:hidden}
+#ld{height:100vh;height:100dvh}
 </style>
 </head>
-<body>
+<body class="ld">
 <div id="pb"></div>
 <div id="cur" aria-hidden="true"><span class="cb" id="curl">ZOOM</span></div>
 
@@ -351,7 +359,7 @@ footer a.fl svg{width:18px;height:18px;flex:none}
 
 <main>
 <div class="hero" id="top">
-  <div class="hbg" aria-hidden="true"><span class="o1"></span><span class="o2"></span><span class="dash d1"></span><span class="dash d2"></span><span class="dash d3"></span><span class="pl p1">+</span><span class="pl p2">+</span><span class="pl p3">+</span></div>
+  <div class="hbg" aria-hidden="true"><span class="o1"></span><span class="o2"></span><span class="pl p1">+</span><span class="pl p2">+</span><span class="pl p3">+</span></div>
   <div class="wrap hg">
     <div>
       <p class="hi rv">// Hi, I'm <b>Chetan Kawarkhe</b></p>
@@ -583,13 +591,14 @@ function boot(){return new Promise(res=>{
     while(li<L.length&&p>=L[li][0]){const d=document.createElement('div');d.innerHTML=L[li][1];$('#lt').appendChild(d);li++}
     k<1?requestAnimationFrame(f):res()})(t0)})}
 async function start(){
+  setTimeout(()=>document.body.classList.remove('ld'),10000);
   onScroll();
   const ready=Promise.race([loaded,wait(5000)]);
-  if(reduce){await Promise.all([boot(),ready]);$('#ld').classList.add('fill');await wait(500);$('#ld').remove();reveal();return}
   await Promise.all([boot(),ready]);
   await wait(250);$('#ld').classList.add('fill');
   await wait(800);$('#ld').classList.add('go');
-  setTimeout(reveal,300);setTimeout(()=>$('#ld').remove(),1200);
+  document.body.classList.remove('ld');
+  setTimeout(reveal,300);setTimeout(()=>$('#ld')?.remove(),1200);
 }
 start();
 
